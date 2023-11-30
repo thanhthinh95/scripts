@@ -1,0 +1,23 @@
+try {
+    function formatNumber(number) {
+        return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    }
+
+    if(pm.response.status === "OK"){
+        const responseJson = pm.response.json();
+        let totalView = 0;
+        const itemList = responseJson?.itemList || [];
+        itemList.map(item => {
+            totalView += item?.stats?.playCount || 0; 
+        })
+        
+        let message = (totalView >= 100000 ? "✅" : "⌛") + "      ";
+
+        message += formatNumber(totalView) + "      " + pm.info.requestName;
+        console.info(message);
+    } else {
+        console.info("❎      Lỗi rồi      " + pm.info.requestName)
+    }
+} catch(e){
+    console.info("❎      Lỗi rồi      " + pm.info.requestName)
+}
